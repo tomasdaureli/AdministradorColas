@@ -1,0 +1,6 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "/Users/tomasdaureli/Dropbox/UADE/Ing. Informatica/Programacion II/JAR/JAR/Parcial.jar"
+    ]
+}
