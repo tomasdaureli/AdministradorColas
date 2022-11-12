@@ -19,7 +19,12 @@ public class AdminColasLD implements AdministradorDeColasTDA{
         cantPuestos = cantidad;
         pacientes = new ConjuntoLD();
         colaPacientes = new ColaPrioridadLD();
+        turnos = new DicSimpleL();
+        historial = new DicMultipleL();
+        pacientes.inicializarConjunto();
+        colaPacientes.inicializarCola();
         turnos.inicializarDiccionario();
+        historial.inicializarDiccionario();
     }
 
     public int acolar(int demora){
@@ -28,7 +33,11 @@ public class AdminColasLD implements AdministradorDeColasTDA{
 
     public void acolar(int idElemento, int demora){
         if(!pacientes.pertenece(idElemento)){
+            pacientes.agregar(idElemento);
             colaPacientes.acolarPrioridad(idElemento, demora);
+        }
+        else {
+            System.out.println("El paciente ya esta en la cola.");
         }
     }
 
