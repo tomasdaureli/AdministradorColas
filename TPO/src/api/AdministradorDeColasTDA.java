@@ -15,4 +15,8 @@ public interface AdministradorDeColasTDA {
     DiccionarioMultipleTDA elementos();
     ConjuntoTDA atendidosXpuesto(int puesto);
     ColaPrioridadTDA programacion();
+    String recuperarPrefijo(int prioridad);
+    int recuperarPrioridad(int opcion);
+    String generarTicket(int idElemento);
+    boolean colaVacia();
 }

@@ -9,9 +9,10 @@ import apis.DiccionarioSimpleTDA;
 public class AdminColasLD implements AdministradorDeColasTDA{
 
     private int cantPuestos;
+    public static int idElemento = 0;
     private ConjuntoTDA pacientes;
     private ColaPrioridadTDA colaPacientes;
-    private DiccionarioSimpleTDA turnos;
+    private DiccionarioSimpleTDA turnos, ticketId;
     private DiccionarioMultipleTDA historial;
 
     
@@ -21,30 +22,37 @@ public class AdminColasLD implements AdministradorDeColasTDA{
         colaPacientes = new ColaPrioridadLD();
         turnos = new DicSimpleL();
         historial = new DicMultipleL();
+        ticketId = new DicSimpleL();
         pacientes.inicializarConjunto();
         colaPacientes.inicializarCola();
         turnos.inicializarDiccionario();
+        ticketId.inicializarDiccionario();
         historial.inicializarDiccionario();
     }
 
     public int acolar(int demora){
-        return 0;
+        idElemento++;
+        pacientes.agregar(idElemento);
+        colaPacientes.acolarPrioridad(idElemento, demora);
+        return idElemento;
     }
 
     public void acolar(int idElemento, int demora){
-        if(!pacientes.pertenece(idElemento)){
-            pacientes.agregar(idElemento);
-            colaPacientes.acolarPrioridad(idElemento, demora);
-        }
-        else {
-            System.out.println("El paciente ya esta en la cola.");
-        }
+    //     if(!pacientes.pertenece(idElemento)){
+    //         pacientes.agregar(idElemento);
+    //         colaPacientes.acolarPrioridad(idElemento, demora);
+    //     }
+    //     else {
+    //         System.out.println("El paciente ya esta en la cola.");
+    //     }
     }
 
     public int desacolar(int puesto){
         int ticket = -1;
         if(puesto > 0 && puesto <= cantPuestos && !colaPacientes.colaVacia()){
             ticket = colaPacientes.primero();
+            int prioridad = colaPacientes.prioridad();
+            ticketId.agregar(ticket, prioridad);
             turnos.agregar(puesto, ticket);
             historial.agregar(puesto, ticket);
             colaPacientes.desacolar();
@@ -70,10 +78,10 @@ public class AdminColasLD implements AdministradorDeColasTDA{
             int valor = colaPacientes.primero();
             int prioridad = colaPacientes.prioridad();
             aux.acolarPrioridad(valor, prioridad);
-            colaPacientes.desacolar();
             if (valor == idElemento){
                 indice = posicion;
             }
+            colaPacientes.desacolar();
             posicion++;
         }
         // Restauro cola original
@@ -138,5 +146,48 @@ public class AdminColasLD implements AdministradorDeColasTDA{
             aux.desacolar();
         }
         return copia;
+    }
+
+    public String generarTicket(int idElemento){
+        String ticket;
+        String prefijo = recuperarPrefijo(ticketId.recuperar(idElemento));
+        ticket = prefijo + idElemento;
+        return ticket;
+    }
+
+    public String recuperarPrefijo(int prioridad) {
+        String prefijo = "";
+        switch(prioridad) {
+            case 10:
+                prefijo = "GUA";
+                break;
+            case 20:
+                prefijo = "ENF";
+                break;
+            case 40:
+                prefijo = "ODO";
+                break;
+        }
+        return prefijo;
+    }
+
+    public int recuperarPrioridad(int opcion) {
+        int prioridad = -1;
+        switch(opcion) {
+            case 0:
+                prioridad = 10;
+                break;
+            case 1:
+                prioridad = 20;
+                break;
+            case 2:
+                prioridad = 40;
+                break;
+        }
+        return prioridad;
+    }
+
+    public boolean colaVacia() {
+        return colaPacientes.colaVacia();
     }
 }
