@@ -53,7 +53,7 @@ public class AdminColasLD implements AdministradorDeColasTDA{
             ticket = colaPacientes.primero();
             int prioridad = colaPacientes.prioridad();
             ticketId.agregar(ticket, prioridad);
-            turnos.agregar(puesto, ticket);
+            turnos.agregar(ticket, puesto);
             historial.agregar(puesto, ticket);
             colaPacientes.desacolar();
         }
